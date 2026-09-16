@@ -154,11 +154,12 @@ forever(function () {
         . . . . . f f f 5 5 5 5 5 f . . 
         . . . . . . . . f f f f f f . . 
         `, mySprite2, -75, 0)
-    pause(2000)
+    pause(1000)
 })
 forever(function () {
     if (trqackdelay == 0) {
-        pause(1000)
+        pause(500)
+        trqackdelay += 1
     }
     mySprite3.setPosition(160, randint(0, 160))
     projectile = sprites.createProjectileFromSprite(img`
@@ -179,5 +180,5 @@ forever(function () {
         . . . . . . f f f f d d d c . . 
         . . . . . . . . . . c c c . . . 
         `, mySprite3, -75, 0)
-    pause(2000)
+    pause(1000)
 })
