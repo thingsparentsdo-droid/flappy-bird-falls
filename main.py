@@ -4,12 +4,14 @@ def on_on_overlap(sprite, otherSprite):
     pause(500)
 sprites.on_overlap(SpriteKind.player, SpriteKind.projectile, on_on_overlap)
 
+scoretracker = 0
+tracker = 0
+trqackdelay = 0
 projectile: Sprite = None
 button = False
 level = 0
 mySprite: Sprite = None
 statusbar: StatusBarSprite = None
-trqackdelay = 0
 info.set_life(100)
 statusbar = statusbars.create(75, 4, StatusBarKind.health)
 statusbar.attach_to_sprite(mySprite)
@@ -119,13 +121,13 @@ animation.run_image_animation(mySprite,
             """)],
     100,
     True)
-tracker = 0
 enemysoeed = -75
 
 def on_forever():
     global button
     if controller.any_button.is_pressed():
         button = True
+        info.change_score_by(1)
     else:
         button = False
     if button == False:
@@ -166,8 +168,10 @@ def on_forever2():
         mySprite2,
         enemysoeed,
         0)
+    projectile.set_flag(SpriteFlag.AUTO_DESTROY, True)
     projectile.start_effect(effects.bubbles)
     pause(1000)
+    info.change_score_by(1)
 forever(on_forever2)
 
 def on_forever3():
@@ -197,8 +201,10 @@ def on_forever3():
         mySprite3,
         enemysoeed,
         0)
+    mySprite4.set_position(160, randint(0, 160))
     projectile.start_effect(effects.bubbles)
     pause(1000)
+    info.change_score_by(1)
 forever(on_forever3)
 
 def on_forever4():
@@ -228,6 +234,7 @@ def on_forever4():
         mySprite4,
         enemysoeed,
         0)
+    mySprite4.set_position(160, randint(0, 160))
     animation.run_image_animation(projectile,
         [img("""
                 . . . . . . . . . . . . . . . .
@@ -341,10 +348,11 @@ def on_forever4():
         True)
     projectile.start_effect(effects.bubbles)
     pause(1000)
+    info.change_score_by(1)
 forever(on_forever4)
 
 def on_forever5():
-    global enemysoeed, tracker
+    global enemysoeed, tracker, scoretracker
     if info.life() <= 50 and tracker <= 0:
         music.stop_all_sounds()
         music.play(music.create_song(hex("""
@@ -353,6 +361,7 @@ def on_forever5():
             music.PlaybackMode.LOOPING_IN_BACKGROUND)
         enemysoeed += -15
         tracker += 1
+        info.change_score_by(100)
     if info.life() <= 10 and tracker <= 1:
         music.stop_all_sounds()
         music.play(music.create_song(hex("""
@@ -361,4 +370,30 @@ def on_forever5():
             music.PlaybackMode.LOOPING_IN_BACKGROUND)
         enemysoeed += -15
         tracker += 1
+        info.change_score_by(100)
+    if mySprite.y < 60:
+        info.change_score_by(1)
+    if info.score() >= 100 and scoretracker == 0:
+        enemysoeed += -15
+        scoretracker += 1
+        info.change_score_by(100)
+    if info.score() >= 1000 and scoretracker == 3:
+        enemysoeed += -15
+        scoretracker += 1
+        info.change_score_by(100)
+    if info.score() >= 10000 and scoretracker <= 4:
+        enemysoeed += -15
+        scoretracker += 1
+        info.change_score_by(100)
+    if info.score() >= 200 and scoretracker <= 1:
+        enemysoeed += -15
+        scoretracker += 1
+        info.change_score_by(100)
+    if info.score() >= 500 and scoretracker <= 2:
+        enemysoeed += -15
+        scoretracker += 1
+        info.change_score_by(100)
+    if info.score() >= 1000000 and scoretracker <= 5:
+        info.change_score_by(100)
+        game.game_over(True)
 forever(on_forever5)
